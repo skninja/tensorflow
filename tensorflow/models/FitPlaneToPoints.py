@@ -13,11 +13,11 @@ import numpy as np
 ### Make 100 phony data point in NumPy ###
 
 x_data = np.float32(np.random.rand(2, 100))
-# 2 x 100 matrix is generated, with elements lying between 0 and 1
+# 2 x 100 matrix is generated, with elements lying [0, 1)
 # these are x and y coordinates of the 3D points
 
 y_data = np.dot([0.800, 0.300], x_data) + 0.200
-# the z coordinates of the 100 points calculated by  z = ax + by +c
+# the z coordinates of the 100 points calculated by  z = ax + by + c
 # equation of a plane
 # here -a = .8, -b = .3, c = .2
 
@@ -36,7 +36,7 @@ y = tf.matmul(W, x_data) + b
 
 loss = tf.reduce_mean(tf.square(y - y_data))
 # mean of squares of the difference between guessed and actual z coords.
-optimizer = tf.train.GradientDescentOptimizer(0.5)
+optimizer = tf.train.GradientDescentOptimizer(0.03)
 # set up grad desc optimizer w/ learning rate = 0.5
 train = optimizer.minimize(loss)
 # aka : W_new = W_old - 0.5 * gradient(loss)
@@ -50,7 +50,7 @@ sess = tf.Session()
 sess.run(init)
 
 ### Fit the plane ###
-for step in xrange(0, 201):
+for step in xrange(0, 2001):
     sess.run(train)
     if step % 20 == 0:
         print step, sess.run(W), sess.run(b)
